@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Banking Assistant</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4f46e5',
+                        secondary: '#6366f1',
+                        accent: '#818cf8',
+                        light: '#f8fafc',
+                        dark: '#1e293b'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            font-family: 'Inter', sans-serif;
+            transition: all 0.2s ease;
+        }
+        
+        .message-container {
+            scroll-behavior: smooth;
+        }
+        
+        .typing-indicator {
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: #4b5563;
+            margin: 0 2px;
+        }
+        
+        .chat-bubble {
+            max-width: 80%;
+            word-wrap: break-word;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        
+        .bounce {
+            animation: bounce 1s infinite;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .knowledge-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .knowledge-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <header class="text-center mb-12 fade-in">
+            <h1 class="text-4xl font-bold text-primary mb-3">AI Banking Assistant</h1>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto">Enhanced with comprehensive banking knowledge base for intelligent customer support</p>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Chat Interface -->
+            <div class="lg:col-span-2 bg-white rounded-2xl shadow-xl p-6">
+                <div class="flex items-center mb-6">
+                    <div class="bg-indigo-100 p-3 rounded-2xl mr-4">
+                        <i class="fas fa-robot text-indigo-600 text-2xl"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-800">Chat with Assistant</h2>
+                        <p class="text-gray-600">Ask any banking-related questions</p>
+                    </div>
+                </div>
+
+                <!-- Messages Container -->
+                <div class="bg-gray-50 rounded-2xl p-4 h-96 overflow-y-auto mb-4 message-container">
+                    <div class="space-y-4">
+                        <!-- Bot message -->
+                        <div class="flex justify-start">
+                            <div class="bg-gray-100 text-gray-800 rounded-2xl rounded-bl-none p-4 max-w-xs md:max-w-md chat-bubble">
+                                <p>Hello! I'm your AI banking assistant. How can I help you today? 👋</p>
+                                <div class="text-xs text-gray-500 mt-1">10:30 AM</div>
+                            </div>
+                        </div>
+
+                        <!-- User message -->
+                        <div class="flex justify-end">
+                            <div class="bg-primary text-white rounded-2xl rounded-br-none p-4 max-w-xs md:max-w-md chat-bubble">
+                                <p>How do I open a new account?</p>
+                                <div class="text-xs text-indigo-200 mt-1">10:31 AM</div>
+                            </div>
+                        </div>
+
+                        <!-- Bot message -->
+                        <div class="flex justify-start">
+                            <div class="bg-gray-100 text-gray-800 rounded-2xl rounded-bl-none p-4 max-w-xs md:max-w-md chat-bubble">
+                                <p>To open a bank account, you need to provide valid ID proof, address proof, and passport-sized photos. You can visit any branch or apply online through our website. 📝</p>
+                                <div class="text-xs text-gray-500 mt-1">10:31 AM</div>
+                            </div>
+                        </div>
+
+                        <!-- Typing indicator -->
+                        <div class="flex justify-start">
+                            <div class="bg-gray-100 text-gray-800 rounded-2xl rounded-bl-none p-4">
+                                <div class="typing-indicator">
+                                    <span class="typing-dot bounce" style="animation-delay: 0s"></span>
+                                    <span class="typing-dot bounce" style="animation-delay: 0.2s"></span>
+                                    <span class="typing-dot bounce" style="animation-delay: 0.4s"></span>
+                                    <span class="ml-2 text-sm">AI is thinking...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Input Form -->
+                <form class="bg-white rounded-2xl p-4 flex space-x-3">
+                    <input type="text" placeholder="Ask about banking services..." class="flex-1 bg-gray-100 border-0 rounded-2xl px-4 py-3 text-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <button class="bg-indigo-600 text-white rounded-2xl p-3 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </form>
+
+                <!-- Quick Questions -->
+                <div class="mt-6">
+                    <p class="text-gray-700 font-medium mb-3 flex items-center">
+                        <i class="fas fa-bolt text-indigo-500 mr-2"></i>
+                        Quick questions:
+                    </p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <button class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-sm font-medium rounded-xl py-2 px-4 text-left">
+                            How to open an account?
+                        </button>
+                        <button class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-sm font-medium rounded-xl py-2 px-4 text-left">
+                            What's the minimum balance?
+                        </button>
+                        <button class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-sm font-medium rounded-xl py-2 px-4 text-left">
+                            How to transfer money?
+                        </button>
+                        <button class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-sm font-medium rounded-xl py-2 px-4 text-left">
+                            Lost my card - what to do?
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Knowledge Base -->
+            <div class="bg-white rounded-2xl shadow-xl p-6">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                    <i class="fas fa-database text-primary mr-2"></i>
+                    Banking Knowledge Base
+                </h2>
+                
+                <div class="space-y-4 max-h-[calc(100vh-200px)] overflow-y-auto pr-2">
+                    <!-- Knowledge items -->
+                    <div class="knowledge-card bg-gray-50 p-4 rounded-xl">
+                        <h3 class="font-semibold text-primary">Account Opening</h3>
+                        <p class="text-sm text-gray-600 mt-1">Documents required and process for opening new accounts</p>
+                        <div class="text-xs text-gray-500 mt-2">12 questions</div>
+                    </div>
+                    
+                    <div class="knowledge-card bg-gray-50 p-4 rounded-xl">
+                        <h3 class="font-semibold text-primary">Loans & Credit</h3>
+                        <p class="text-sm text-gray-600 mt-1">Information about various loan products and eligibility</p>
+                        <div class="text-xs text-gray-500 mt-2">18 questions</div>
+                    </div>
+                    
+                    <div class="knowledge-card bg-gray-50 p-4 rounded-xl">
+                        <h3 class="font-semibold text-primary">Digital Banking</h3>
+                        <p class="text-sm text-gray-600 mt-1">Mobile app, internet banking, and digital services</p>
+                        <div class="text-xs text-gray-500 mt-2">15 questions</div>
+                    </div>
+                    
+                    <div class="knowledge-card bg-gray-50 p-4 rounded-xl">
+                        <h3 class="font-semibold text-primary">Cards</h3>
+                        <p class="text-sm text-gray-600 mt-1">Debit cards, credit cards, and related services</p>
+                        <div class="text-xs text-gray-500 mt-2">14 questions</div>
+                    </div>
+                    
+                    <div class="knowledge-card bg-gray-50 p-4 rounded-xl">
+                        <h3 class="font-semibold text-primary">Investments</h3>
+                        <p class="text-sm text-gray-600 mt-1">Fixed deposits, mutual funds, and investment options</p>
+                        <div class="text-xs text-gray-500 mt-2">16 questions</div>
+                    </div>
+                    
+                    <div class="knowledge-card bg-gray-50 p-4 rounded-xl">
+                        <h3 class="font-semibold text-primary">Payments & Transfers</h3>
+                        <p class="text-sm text-gray-600 mt-1">NEFT, RTGS, IMPS, UPI and other transfer methods</p>
+                        <div class="text-xs text-gray-500 mt-2">13 questions</div>
+                    </div>
+                    
+                    <div class="knowledge-card bg-gray-50 p-4 rounded-xl">
+                        <h3 class="font-semibold text-primary">Security</h3>
+                        <p class="text-sm text-gray-600 mt-1">Account security, fraud prevention, and safety measures</p>
+                        <div class="text-xs text-gray-500 mt-2">11 questions</div>
+                    </div>
+                    
+                    <div class="knowledge-card bg-gray-50 p-4 rounded-xl">
+                        <h3 class="font-semibold text-primary">Customer Support</h3>
+                        <p class="text-sm text-gray-600 mt-1">Contact information and support channels</p>
+                        <div class="text-xs text-gray-500 mt-2">8 questions</div>
+                    </div>
+                </div>
+                
+                <div class="mt-6 bg-indigo-50 p-4 rounded-xl">
+                    <h3 class="font-semibold text-primary flex items-center">
+                        <i class="fas fa-lightbulb text-yellow-500 mr-2"></i>
+                        Did you know?
+                    </h3>
+                    <p class="text-sm text-gray-700 mt-1">Our AI assistant can understand questions in multiple phrasings and provide accurate answers from our knowledge base of 100+ banking topics.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Sample Knowledge Base Content (for demonstration) -->
+        <div class="mt-12 bg-white rounded-2xl shadow-xl p-6">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Sample Banking Knowledge Base Content</h2>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <h3 class="text-lg font-semibold text-primary mb-3">Account Services</h3>
+                    <div class="space-y-3">
+                        <div class="p-3 bg-gray-50 rounded-lg">
+                            <p class="font-medium">How to open a savings account?</p>
+                            <p class="text-sm text-gray-600 mt-1">Visit any branch with ID proof, address proof, and photographs. You can also apply online through our website or mobile app.</p>
+                        </div>
+                        <div class="p-3 bg-gray-50 rounded-lg">
+                            <p class="font-medium">What is the minimum balance requirement?</p>
+                            <p class="text-sm text-gray-600 mt-1">Savings accounts require ₹1000 minimum balance, while current accounts require ₹5000. Salary accounts have zero balance requirements.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold text-primary mb-3">Digital Banking</h3>
+                    <div class="space-y-3">
+                        <div class="p-3 bg-gray-50 rounded-lg">
+                            <p class="font-medium">How to reset internet banking password?</p>
+                            <p class="text-sm text-gray-600 mt-1">Click on 'Forgot Password' on the login page, verify with OTP sent to your registered mobile, and set a new password.</p>
+                        </div>
+                        <div class="p-3 bg-gray-50 rounded-lg">
+                            <p class="font-medium">Is mobile banking secure?</p>
+                            <p class="text-sm text-gray-600 mt-1">Yes, we use 128-bit SSL encryption and two-factor authentication to ensure your transactions are completely secure.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-6 text-center">
+                <button class="bg-primary text-white px-6 py-2 rounded-xl font-medium hover:bg-secondary">
+                    View Full Knowledge Base
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="mt-12 bg-dark text-white py-8 text-center">
+        <p>© 2023 AI Banking Assistant. All rights reserved.</p>
+        <p class="text-gray-400 text-sm mt-2">Powered by TensorFlow.js and Universal Sentence Encoder</p>
+    </footer>
+
+    <script>
+        // Simple interactive functionality for demonstration
+        document.addEventListener('DOMContentLoaded', function() {
+            // Quick question buttons
+            const quickQuestions = document.querySelectorAll('.bg-indigo-50');
+            quickQuestions.forEach(button => {
+                button.addEventListener('click', function() {
+                    const question = this.textContent;
+                    document.querySelector('input[type="text"]').value = question;
+                });
+            });
+            
+            // Knowledge base cards
+            const knowledgeCards = document.querySelectorAll('.knowledge-card');
+            knowledgeCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    alert('You clicked on: ' + this.querySelector('h3').textContent);
+                });
+            });
+            
+            // Form submission
+            const form = document.querySelector('form');
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const input = this.querySelector('input');
+                if (input.value.trim() !== '') {
+                    alert('Question submitted: ' + input.value);
+                    input.value = '';
+                }
+            });
+        });
+    </script>
+</body>
+</html>
