@@ -16,6 +16,7 @@ const Help = () => {
   const recognitionRef = useRef(null);
   const [bankingKnowledge, setBankingKnowledge] = useState([]);
   const [currentLanguage, setCurrentLanguage] = useState('en');
+    const [isOpen, setIsOpen] = useState(false);
   const [availableLanguages, setAvailableLanguages] = useState([
     { code: 'en', name: 'English', flag: '🇺🇸' },
     { code: 'hi', name: 'Hindi', flag: '🇮🇳' },
@@ -481,31 +482,48 @@ const Help = () => {
               </div>
             </div>
             
-            {/* Language Selector */}
-            <div className="relative group">
-              <button className="flex items-center space-x-2 bg-gray-100 hover:bg-gray-200 rounded-xl px-3 py-2 transition-colors">
-                <span>{availableLanguages.find(lang => lang.code === currentLanguage)?.flag}</span>
-                <span className="hidden md:inline">{availableLanguages.find(lang => lang.code === currentLanguage)?.name}</span>
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-              
-              <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg py-2 z-10 hidden group-hover:block">
-                {availableLanguages.map((language) => (
-                  <button
-                    key={language.code}
-                    onClick={() => handleLanguageChange(language.code)}
-                    className={`flex items-center space-x-2 w-full px-4 py-2 text-left hover:bg-gray-100 ${
-                      currentLanguage === language.code ? 'bg-indigo-50 text-indigo-700' : ''
-                    }`}
-                  >
-                    <span>{language.flag}</span>
-                    <span>{language.name}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
+           <div className="relative">
+      {/* Toggle button */}
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex items-center space-x-2 bg-gray-100 hover:bg-gray-200 rounded-xl px-3 py-2 transition-colors"
+      >
+        <span>{availableLanguages.find(lang => lang.code === currentLanguage)?.flag}</span>
+        <span className="hidden md:inline">
+          {availableLanguages.find(lang => lang.code === currentLanguage)?.name}
+        </span>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className={`h-4 w-4 transform transition-transform ${isOpen ? "rotate-180" : ""}`}
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+
+      {/* Dropdown */}
+      {isOpen && (
+        <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg py-2 z-10">
+          {availableLanguages.map((language) => (
+            <button
+              key={language.code}
+              onClick={() => {
+                handleLanguageChange(language.code);
+                setIsOpen(false); // close menu after selecting
+              }}
+              className={`flex items-center space-x-2 w-full px-4 py-2 text-left hover:bg-gray-100 ${
+                currentLanguage === language.code ? "bg-indigo-50 text-indigo-700" : ""
+              }`}
+            >
+              <span>{language.flag}</span>
+              <span>{language.name}</span>
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
           </div>
         </div>
 
@@ -518,7 +536,7 @@ const Help = () => {
             {languageContent[currentLanguage].quickQuestionsTitle}
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {languageContent[currentLanguage].quickQuestions.map((question, index) => (
+            {languageContent[currentLanguage]?.quickQuestions?.map((question, index) => (
               <button
                 key={index}
                 onClick={() => handleQuickQuestion(question)}
